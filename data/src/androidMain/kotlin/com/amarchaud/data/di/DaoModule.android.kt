@@ -1,30 +1,18 @@
 package com.amarchaud.data.di
 
-import app.cash.sqldelight.db.SqlDriver
-import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import com.amarchaud.database.PaginationDemoDatabase
-import com.amarchaud.data.db.PaginationDemoDao
-import com.amarchaud.data.db.PaginationDemoDaoImpl
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.amarchaud.data.db.PaginationDemoDb
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-
 actual val daoModule = module {
-    single<SqlDriver> {
-        AndroidSqliteDriver(
-            schema = PaginationDemoDatabase.Schema,
-            context = androidContext(),
-            name = "PaginationDemoDatabase.db"
-        )
-    }
-    single {
-        PaginationDemoDatabase(
-            driver = get()
-        )
-    }
-    single<PaginationDemoDao> {
-        PaginationDemoDaoImpl(
-            database = get()
+    single<RoomDatabase.Builder<PaginationDemoDb>> {
+        val appContext = androidContext()
+        val dbFile = appContext.getDatabasePath("PaginationDemoDb.db")
+        Room.databaseBuilder<PaginationDemoDb>(
+            context = appContext,
+            name = dbFile.absolutePath
         )
     }
 }

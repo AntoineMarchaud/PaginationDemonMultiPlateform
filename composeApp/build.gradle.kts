@@ -52,8 +52,6 @@ kotlin {
                 implementation(libs.ktor.core)
                 implementation(libs.ktor.client.serialization)
                 implementation(libs.ktor.client.content)
-                implementation(libs.sqldelight.paging)
-                implementation(libs.sqldelight.runtime)
                 implementation(libs.coil)
 
 

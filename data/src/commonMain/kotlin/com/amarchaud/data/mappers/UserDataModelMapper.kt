@@ -1,17 +1,26 @@
 package com.amarchaud.data.mappers
 
-import com.amarchaud.database.UsersEntity
 import com.amarchaud.data.models.CoordinatesDataModel
+import com.amarchaud.data.models.CoordinatesEntityModel
 import com.amarchaud.data.models.DobDataModel
+import com.amarchaud.data.models.DobEntityModel
 import com.amarchaud.data.models.IdDataModel
+import com.amarchaud.data.models.IdEntityModel
 import com.amarchaud.data.models.LocationDataModel
+import com.amarchaud.data.models.LocationEntityModel
 import com.amarchaud.data.models.LoginDataModel
 import com.amarchaud.data.models.NameDataModel
+import com.amarchaud.data.models.NameEntityModel
 import com.amarchaud.data.models.PictureDataModel
+import com.amarchaud.data.models.PictureEntityModel
 import com.amarchaud.data.models.RegisteredDataModel
+import com.amarchaud.data.models.RegisteredEntityModel
 import com.amarchaud.data.models.StreetDataModel
+import com.amarchaud.data.models.StreetEntityModel
 import com.amarchaud.data.models.TimezoneDataModel
+import com.amarchaud.data.models.TimezoneEntityModel
 import com.amarchaud.data.models.UserDataModel
+import com.amarchaud.data.models.UserEntityModel
 import com.amarchaud.domain.models.CoordinatesModel
 import com.amarchaud.domain.models.DobModel
 import com.amarchaud.domain.models.IdModel
@@ -23,6 +32,11 @@ import com.amarchaud.domain.models.RegisteredModel
 import com.amarchaud.domain.models.StreetModel
 import com.amarchaud.domain.models.TimezoneModel
 import com.amarchaud.domain.models.UserModel
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 // DataModel to domain
 
@@ -53,7 +67,12 @@ internal fun LocationDataModel.toDomain() = LocationModel(
     city = this.city,
     state = this.state,
     country = this.country,
-    // postcode = this.postcode.toString(),
+    /*
+    postcode = when(this.postcode) {
+        is Int -> this.postcode.toString()
+        is String -> this.postcode
+        else -> throw Exception("impossible")
+    },*/
     coordinates = this.coordinates?.toDomain(),
     timezone = this.timezone?.toDomain(),
 )
@@ -104,33 +123,86 @@ internal fun PictureDataModel.toDomain() = PictureModel(
     thumbnail = this.thumbnail,
 )
 
-// DataModel (api) to EntityModel
 
-internal fun UserDataModel.toEntity() = UsersEntity(
+// DataModel to EntityModel
+
+internal fun UserDataModel.toEntity() = UserEntityModel(
     gender = this.gender,
-    name_title = this.name?.title,
-    name_first = this.name?.first,
-    name_last = this.name?.last,
-    location_street_name = this.location?.street?.name,
-    location_street_number = this.location?.street?.number,
-    location_city = this.location?.city,
-    location_state = this.location?.state,
-    location_country = this.location?.country,
-    location_postcode = this.location?.postcode.toString(),
-    location_coordinates_longitude = this.location?.coordinates?.longitude,
-    location_coordinates_latitude = this.location?.coordinates?.latitude,
-    location_timezone_offset = this.location?.timezone?.offset,
-    location_timezone_description = this.location?.timezone?.description,
+    name = this.name?.toEntity(),
+    location = this.location?.toEntity(),
     email = this.email.orEmpty(),
-    dob_date = this.dob?.date?.toString(),
-    dob_age = this.dob?.age,
-    registered_age = this.registered?.age,
-    registered_date = this.registered?.date?.toString(),
-    id_value = this.id?.value,
-    id_name = this.id?.name,
-    picture_thumbnail = this.picture?.thumbnail,
-    picture_medium = this.picture?.medium,
-    picture_large = this.picture?.large,
+    dob = this.dob?.toEntity(),
+    registered = this.registered?.toEntity(),
+    phone = this.phone,
+    cell = this.cell,
+    id = this.id?.toEntity(),
+    picture = this.picture?.toEntity(),
     nat = this.nat,
-    _id = 0
 )
+
+internal fun NameDataModel.toEntity() = NameEntityModel(
+    title = this.title,
+    first = this.first,
+    last = this.last
+)
+
+internal fun LocationDataModel.toEntity() = LocationEntityModel(
+    street = this.street?.toEntity(),
+    city = this.city,
+    state = this.state,
+    country = this.country,
+    /*
+    postcode = when(this.postcode) {
+        is Int -> this.postcode.toString()
+        is String -> this.postcode
+        else -> throw Exception("impossible")
+    },*/
+    coordinates = this.coordinates?.toEntity(),
+    timezone = this.timezone?.toEntity(),
+)
+
+internal fun StreetDataModel.toEntity() = StreetEntityModel(
+    number = this.number,
+    name = this.name,
+)
+
+internal fun CoordinatesDataModel.toEntity() = CoordinatesEntityModel(
+    latitude = this.latitude,
+    longitude = this.longitude,
+)
+
+internal fun TimezoneDataModel.toEntity() = TimezoneEntityModel(
+    offset = this.offset,
+    description = this.description,
+)
+
+
+internal fun DobDataModel.toEntity() = DobEntityModel(
+    date = this.date,
+    age = this.age,
+)
+
+internal fun RegisteredDataModel.toEntity() = RegisteredEntityModel(
+    date = this.date,
+    age = this.age,
+)
+
+internal fun IdDataModel.toEntity() = IdEntityModel(
+    name = this.name,
+    value = this.value
+)
+
+internal fun PictureDataModel.toEntity() = PictureEntityModel(
+    large = this.large,
+    medium = this.medium,
+    thumbnail = this.thumbnail,
+)
+
+private fun String.toLocalDate(): LocalDateTime {
+    // Convertir une chaîne ISO 8601 avec "Z" en LocalDateTime
+    return try {
+        Instant.parse(this).toLocalDateTime(TimeZone.UTC)
+    } catch (e: Exception) {
+        Clock.System.now().toLocalDateTime(TimeZone.UTC)
+    }
+}

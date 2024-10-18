@@ -1,7 +1,7 @@
 package com.amarchaud.data.di
 
-import com.amarchaud.data.api.PaginationDemoApi
-import com.amarchaud.data.api.PaginationDemoApiKtorImpl
+import com.amarchaud.ui.api.PaginationDemoApi
+import com.amarchaud.ui.api.PaginationDemoApiKtorImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.darwin.Darwin
 import io.ktor.client.plugins.DefaultRequest

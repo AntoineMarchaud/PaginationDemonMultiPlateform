@@ -1,6 +1,7 @@
 package com.amarchaud.paginationdemokmm
 
 import android.app.Application
+import com.amarchaud.data.di.daoCommonModule
 import com.amarchaud.data.di.daoModule
 import com.amarchaud.data.di.networkModule
 import com.amarchaud.data.di.repoModule
@@ -18,7 +19,7 @@ class PaginationDemoApplication : Application() {
         startKoin {
             logger(PrintLogger(Level.DEBUG))
             androidContext(this@PaginationDemoApplication)
-            modules(networkModule, daoModule, repoModule, useCaseModule, viewModelModule)
+            modules(networkModule, daoModule, daoCommonModule, repoModule, useCaseModule, viewModelModule)
         }
     }
 }

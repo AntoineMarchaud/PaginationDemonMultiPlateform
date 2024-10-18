@@ -10,6 +10,7 @@ import com.amarchaud.data.db.PaginationDemoDao
 import com.amarchaud.domain.models.UserModel
 import com.amarchaud.domain.repository.PaginationDemoRepository
 import com.amarchaud.data.mappers.toDomain
+import com.amarchaud.data.repository.remotemediator.RandomUsersRemoteMediator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -23,7 +24,7 @@ class PaginationDemoRepositoryImpl(
         config = PagingConfig(
             pageSize = 20,
         ),
-        remoteMediator = com.amarchaud.data.repository.remotemediator.RandomUsersRemoteMediator(
+        remoteMediator = RandomUsersRemoteMediator(
             paginationDemoDao = paginationDemoDao,
             paginationDemoApi = paginationDemoApi
         ),
