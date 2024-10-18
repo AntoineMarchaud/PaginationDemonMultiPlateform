@@ -1,0 +1,21 @@
+local.properties
+.DS_STORE
+build/
+.gradle/
+.idea/
+.kotlin/
+iosApp/.idea/               # Configurations spécifiques aux IDE comme IntelliJ/Android Studio
+iosApp/build/               # Répertoire de build généré
+iosApp/DerivedData/         # Caches générés par Xcode
+iosApp/*.xcuserdatad/       # Données spécifiques à l'utilisateur
+iosApp/*.xcworkspace/       # Workspaces Xcode (peuvent être générés automatiquement)
+iosApp/.DS_Store            # Fichiers macOS inutiles
+iosApp/.swiftpm/            # Cache Swift Package Manager (si utilisé)
+iosAppTest/.idea/               # Configurations spécifiques aux IDE comme IntelliJ/Android Studio
+iosAppTest/build/               # Répertoire de build généré
+iosAppTest/DerivedData/         # Caches générés par Xcode
+iosAppTest/*.xcuserdatad/       # Données spécifiques à l'utilisateur
+iosAppTest/*.xcworkspace/       # Workspaces Xcode (peuvent être générés automatiquement)
+iosAppTest/.DS_Store            # Fichiers macOS inutiles
+iosAppTest/.swiftpm/            # Cache Swift Package Manager (si utilisé)
+
